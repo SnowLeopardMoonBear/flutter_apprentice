@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'recipe.dart';
 
 void main() {
   runApp(const RecipeApp());
@@ -14,7 +15,7 @@ class RecipeApp extends StatelessWidget {
     return MaterialApp(
       title: 'Recipe calculator',
       theme: theme.copyWith(
-        colorScheme:  theme.colorScheme.copyWith(
+        colorScheme: theme.colorScheme.copyWith(
           primary: Colors.grey,
           secondary: Colors.black,
         ),
@@ -41,10 +42,45 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: SafeArea(
-        child: Container(
-          child: Text('test number 1'),
-        ),
+        child: ListView.builder(
+          itemCount: Recipe.samples.length,
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                    return Text("Detail page");
+                    },
+                  ),
+                );
+              },
+              child: buildRecipeCard(Recipe.samples[index]),
+            );
+          },
+        )
       ),
+    );
+  }
+
+  Widget buildRecipeCard(Recipe recipe) {
+    return Card(
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0)
+        ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            Image(image: AssetImage(recipe.imageUrl)),
+            const SizedBox(
+              height: 14.0,
+            ),
+            Text(recipe.label),
+          ],
+        )
+      )
     );
   }
 }
